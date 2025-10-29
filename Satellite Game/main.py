@@ -5,8 +5,8 @@ from time import time
 HEIGHT = 500
 WIDTH = 800
 
-satellite_list = [""]
-lines_list = [""]
+satellite_list = []
+lines_list = []
 next_satellite = 0
 number_of_satellite = 10
 
@@ -30,11 +30,11 @@ def draw():
     global total_time
     screen.blit("starysky",(0,0))
     number = 1
-    for satellite in satellite_list():
+    for satellite in satellite_list:
         screen.draw.text(str(number),(satellite.pos[0],satellite.pos[1]+20))
         satellite.draw()
         number +=1
-    for line in lines_list():
+    for line in lines_list:
         screen.draw.line(line[0],line[1],(255,255,255))
     if next_satellite < number_of_satellite:
         total_time = time() - start_time
@@ -46,6 +46,18 @@ def update():
     pass
 
 def on_mouse_down(pos):
-    pass
+    global next_satellite
+    global lines_list
+    if next_satellite < number_of_satellite:
+        if satellite_list[next_satellite].collidepoint(pos):
+            if next_satellite:
+                lines_list.append((satellite_list[next_satellite-1].pos,satellite_list[next_satellite].pos))
+            next_satellite +=1
+        else:
+            lines_list = []
+            next_satellite = 0
+
+
+   
 create_satellites()
 pgzrun.go()
